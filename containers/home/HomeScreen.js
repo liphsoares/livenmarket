@@ -1,23 +1,27 @@
 import {
-    Container, Header, Content, Button, Body, Text,
-    Card, CardItem, View, Left, Right, Title, Toast, Thumbnail, Icon
+    Container, Header, Body, Text,
+    Card, CardItem, View, Left, Right, Title, Toast, Thumbnail, Icon, Spinner
 } from "native-base";
 import React, { useEffect, useState } from 'react';
-import { Ionicons, AntDesign } from '@expo/vector-icons';
-import { StyleSheet, ImageBackground, Image, Alert, FlatList, TouchableOpacity } from 'react-native';
+import { StyleSheet, Alert, FlatList, TouchableOpacity } from 'react-native';
+import { useIsFocused } from '@react-navigation/native';
+import CartIcon from "../sale/components/CartIcon";
 
-import * as Animatable from 'react-native-animatable';
-
-export default function HomeScreen({ route, navigation }) {
-    const [IsBoletoDetails, setBoletoDetails] = useState(false);
-    const [SelectedData, setSelectedData] = useState(null);
+export default function HomeScreen({ props, navigation }) {
+    const isFocused = useIsFocused();
     const [searchResults, setSearchResults] = useState([]);
     const [IsLoading, setIsLoading] = useState(true);
-    const [IsRefreshing, setIsRefreshing] = useState(false);
+    const [badge, setBadge] = useState(0);
 
     useEffect(() => {
-        getData()
+        getData();
     }, [])
+
+    useEffect(() => {
+        isFocused ?
+            setBadge(CART_ITEMS.length) : null
+
+    }, [props, isFocused]);
 
     async function getData() {
         setIsLoading(true);
@@ -34,9 +38,8 @@ export default function HomeScreen({ route, navigation }) {
                     console.log(arr.length)
                     arr.sort((a, b) => { return b.name > a.name })
                     setSearchResults(arr);
-
-                    setIsRefreshing(false);
                     setIsLoading(false);
+                    setBadge(CART_ITEMS.length);
                 }
             }).catch((err) => {
                 Toast.show({
@@ -68,56 +71,62 @@ export default function HomeScreen({ route, navigation }) {
 
     return (
         <Container>
-            <Header transparent androidStatusBarColor="transparent">
-                <Left />
+            <Header transparent androidStatusBarColor="#08012a" style={{ backgroundColor: '#08012a' }}>
+                {/* <Left /> */}
                 <Body>
-                    <Title>Web Market</Title>
+                    <Title style={{ color: '#fff', textAlign: 'center' }}>Web Market</Title>
                 </Body>
                 <Right>
                     <TouchableOpacity onPress={() => {
                         navigation.navigate('Cart');
                     }}>
-                        <Ionicons name="md-cart-sharp" size={24} color="black" />
-                    </TouchableOpacity>
+
+                        <CartIcon value={badge} />
+                    </TouchableOpacity >
                 </Right>
             </Header>
 
-            <FlatList
-                data={searchResults}
-                renderItem={({ item }) => {
-                    console.log(item.createdAt)
-                    return (
-                        <Card transparent>
-                            <CardItem bordered button={true} onPress={() => {
+            {IsLoading ?
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                    <Spinner size={64} color="#ccc" />
+                    <Text note>Aguarde, Carregando...</Text>
+                </View>
+                :
+                <FlatList
+                    data={searchResults}
+                    renderItem={({ item }) => {
+                        console.log(item.createdAt)
+                        return (
+                            <Card transparent>
+                                <CardItem bordered button={true} onPress={() => {
+                                    navigation.navigate('DetailsItem', { product: item })
+                                }}>
+                                    <Left style={{ flex: 1 }}>
+                                        {
+                                            item.image !== '' ?
+                                                <Thumbnail large source={{ uri: item.image.replace('http://lorempixel.com', 'https://loremflickr.com/') }} />
+                                                : <Icon name='md-person' />
+                                        }
+                                        <Body>
+                                            <Text>{item.name}</Text>
+                                            <Text note>R$ {item.price}</Text>
+                                            <Text style={{ marginTop: 10, fontSize: 10 }} note>Saldo: {item.stock}</Text>
+                                        </Body>
 
-                            }}>
-                                <Left style={{ flex: 1 }}>
-                                    {
-                                        item.image !== '' ?
-                                            <Thumbnail large source={{ uri: item.image.replace('http://lorempixel.com', 'https://loremflickr.com/') }} />
-                                            : <Icon name='md-person' />
-                                    }
-                                    <Body>
-                                        <Text>{item.name}</Text>
-                                        <Text note>R$ {item.price}</Text>
-                                        <Text style={{ marginTop: 10, fontSize: 10 }} note>Saldo: {item.stock}</Text>
-                                    </Body>
+                                    </Left>
 
-                                </Left>
-
-                                <Right style={{ flex: 0.1 }}>
-                                    <Icon name="arrow-forward" size={16} />
-                                </Right>
-                            </CardItem>
-                        </Card>
-                    )
-                }}
-                keyExtractor={item => String(item.id)}
-            // ListFooterComponent={renderFooter}
-            // onEndReached={this.handleLoadMore}
-            // onEndReachedThreshold={5}
-
-            />
+                                    <Right style={{ flex: 0.1 }}>
+                                        <Icon name="arrow-forward" size={16} />
+                                    </Right>
+                                </CardItem>
+                            </Card>
+                        )
+                    }}
+                    keyExtractor={item => String(item.id)}
+                // ListFooterComponent={renderFooter}
+                // onEndReached={this.handleLoadMore}
+                // onEndReachedThreshold={5}
+                />}
 
         </Container>
     )

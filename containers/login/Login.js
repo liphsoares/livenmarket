@@ -4,8 +4,8 @@ import { TouchableOpacity, Text, KeyboardAvoidingView, Platform,  StyleSheet, Im
 import { MaterialIcons } from '@expo/vector-icons';
 
 export default function Login({ props, navigation }) {
-    const [Username, setUsername] = useState('');
-    const [Pwd, setPwd] = useState('');
+    const [Username, setUsername] = useState('dev');
+    const [Pwd, setPwd] = useState('dev');
     const [isSecureTextEntry, setisSecureTextEntry] = useState(true);
     const [IsLoading, setIsLoading] = useState(false);
     return (
