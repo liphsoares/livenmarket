@@ -8,7 +8,7 @@ import { StyleSheet, FlatList, TouchableOpacity, View, Alert } from 'react-nativ
 import NumericInput from 'react-native-numeric-input'
 
 // Variável global para armazenamento dos itens do Pedido, Preferi adicionar esta varíavel do que guardar no Storage.
-CART_ITEMS = [];
+  global.CART_ITEMS = [];
 
 export default function Cart({ route, navigation }) {
     // State para Atualizar o FlatList

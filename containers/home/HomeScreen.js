@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Alert, FlatList, TouchableOpacity } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import CartIcon from "../sale/components/CartIcon";
+import CART_ITEMS from "../sale/Cart";
 
 export default function HomeScreen({ props, navigation }) {
     const isFocused = useIsFocused();
@@ -19,7 +20,7 @@ export default function HomeScreen({ props, navigation }) {
 
     useEffect(() => {
         isFocused ?
-            setBadge(CART_ITEMS.length) : null
+            setBadge(global.CART_ITEMS.length) : null
 
     }, [props, isFocused]);
 
@@ -77,9 +78,11 @@ export default function HomeScreen({ props, navigation }) {
                     <Title style={{ color: '#fff', textAlign: 'center' }}>Web Market</Title>
                 </Body>
                 <Right>
-                    <TouchableOpacity onPress={() => {
-                        navigation.navigate('Cart');
-                    }}>
+                    <TouchableOpacity
+                        testID="button-cart"
+                        onPress={() => {
+                            navigation.navigate('Cart');
+                        }}>
 
                         <CartIcon value={badge} />
                     </TouchableOpacity >
@@ -87,17 +90,19 @@ export default function HomeScreen({ props, navigation }) {
             </Header>
 
             {IsLoading ?
-                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <View 
+                testID="loading"
+                style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                     <Spinner size={64} color="#ccc" />
                     <Text note>Aguarde, Carregando...</Text>
                 </View>
                 :
                 <FlatList
+                    
                     data={searchResults}
-                    renderItem={({ item }) => {
-                        console.log(item.createdAt)
+                    renderItem={({ item }) => {                        
                         return (
-                            <Card transparent>
+                            <Card transparent testID="flat-list">
                                 <CardItem bordered button={true} onPress={() => {
                                     navigation.navigate('DetailsItem', { product: item })
                                 }}>

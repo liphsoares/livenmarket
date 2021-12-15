@@ -23,7 +23,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.filipecarlos.LivenMarket"
     },
     "web": {
       "favicon": "./assets/favicon.png"
