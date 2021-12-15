@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Container, View, Item, Input, Label, Header, Spinner } from 'native-base';
-import { TouchableOpacity, Text, KeyboardAvoidingView, Platform,  StyleSheet, Image } from 'react-native';
+import { TouchableOpacity, Text, KeyboardAvoidingView, Platform, StyleSheet, Image } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
 export default function Login({ props, navigation }) {
@@ -8,14 +8,19 @@ export default function Login({ props, navigation }) {
     const [Pwd, setPwd] = useState('dev');
     const [isSecureTextEntry, setisSecureTextEntry] = useState(true);
     const [IsLoading, setIsLoading] = useState(false);
+
+    function navigateToHomeScreen() {
+        navigation.navigate('HomeScreen');
+        return "Navegando para HomeScreen";
+    }
     return (
-        <Container style={{backgroundColor: "#08012a",}}>
+        <Container style={{ backgroundColor: "#08012a", }}>
             <Header transparent androidStatusBarColor="transparent" style={{ backgroundColor: 'transparent', height: 0 }} />
             <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : null} enabled>
 
                 <View style={{
                     flex: 1,
-                    
+
                     alignItems: 'center',
                     flexDirection: 'column',
                     justifyContent: 'center',
@@ -87,12 +92,14 @@ export default function Login({ props, navigation }) {
 
                         {IsLoading ?
                             <Spinner color="#fff" />
-                            : <Button full style={{ marginTop: 20, backgroundColor: "#78d98a" }}
+                            : <Button
+                                testID="btn-how-to-login"
+                                full
+                                style={{ marginTop: 20, backgroundColor: "#78d98a" }}
                                 onPress={() => {
-                                   navigation.navigate('HomeScreen')
-
+                                    navigateToHomeScreen();
                                 }}>
-                                <Text style={{ color: '#08012a', fontSize: 20, fontWeight:'bold' }}>ENTRAR</Text>
+                                <Text style={{ color: '#08012a', fontSize: 20, fontWeight: 'bold' }}>ENTRAR</Text>
                             </Button>}
                     </View>
                 </View>
