@@ -8,7 +8,7 @@ import { StyleSheet, FlatList, TouchableOpacity, View, Alert } from 'react-nativ
 import NumericInput from 'react-native-numeric-input'
 
 // Variável global para armazenamento dos itens do Pedido, Preferi adicionar esta varíavel do que guardar no Storage.
-  global.CART_ITEMS = [];
+global.CART_ITEMS = [];
 
 export default function Cart({ route, navigation }) {
     // State para Atualizar o FlatList
@@ -19,7 +19,7 @@ export default function Cart({ route, navigation }) {
     const [mTotal, setmTotal] = useState(0);
 
     useEffect(() => {
-        let arr = CART_ITEMS;
+        let arr = global.CART_ITEMS;
 
         // Seto todas as quantidades que estão indefinidas para 1
         arr.forEach((element, index) => {
@@ -29,7 +29,7 @@ export default function Cart({ route, navigation }) {
 
         // Passo os valores para o FlatList e também para a Variável Global e refaço o Somatório
         setsearchResults(arr);
-        CART_ITEMS = arr;
+        global.CART_ITEMS = arr;
         sumTotal();
     }, [])
 
@@ -43,12 +43,12 @@ export default function Cart({ route, navigation }) {
             }
         });
         setsearchResults(arr);
-        CART_ITEMS = arr;
+        global.CART_ITEMS = arr;
     }
 
     // Função para Somar os totais
     function sumTotal() {
-        let arr = CART_ITEMS;
+        let arr = global.CART_ITEMS;
         var v = 0;
         arr.forEach((element) => {
             v = v + Number(element.price * element.qtde);
@@ -58,13 +58,13 @@ export default function Cart({ route, navigation }) {
 
     // Função para remover os itens do Array
     function removeItem(item) {
-        let arr = CART_ITEMS;
+        let arr = global.CART_ITEMS;
         let idx = arr.indexOf(item);
         if (idx > -1) { arr.splice(idx, 1); }
-        
+
         setsearchResults(arr);
         setSelectedValue(!selectedValue);
-        CART_ITEMS = arr;
+        global.CART_ITEMS = arr;
         sumTotal();
     }
 
@@ -82,7 +82,7 @@ export default function Cart({ route, navigation }) {
                 </Body>
 
                 <Right >
-                    {CART_ITEMS.length > 0 ? <TouchableOpacity onPress={() => {
+                    {global.CART_ITEMS.length > 0 ? <TouchableOpacity onPress={() => {
                         Alert.alert(
                             "Market",
                             "Deseja limpar o seu carrinho de compras?",
@@ -90,8 +90,8 @@ export default function Cart({ route, navigation }) {
                                 {
                                     text: "SIM",
                                     onPress: () => {
-                                        CART_ITEMS = []
-                                        setsearchResults(CART_ITEMS);
+                                        global.CART_ITEMS = []
+                                        setsearchResults(global.CART_ITEMS);
                                         setSelectedValue(!selectedValue);
                                     },
                                     style: "default",
@@ -111,7 +111,7 @@ export default function Cart({ route, navigation }) {
             {searchResults.length > 0 ? <Content style={{ padding: 10 }}>
                 <FlatList
                     data={searchResults}
-                    renderItem={({ item, index }) => {                        
+                    renderItem={({ item, index }) => {
                         return (
                             <Card >
                                 <CardItem bordered button={true} onPress={() => {
@@ -149,7 +149,7 @@ export default function Cart({ route, navigation }) {
                                                 iconStyle={{ color: 'white' }}
                                                 rightButtonBackgroundColor='#a6d7f3'
                                                 leftButtonBackgroundColor='#a6d7f3' />
-                                        </View>                                      
+                                        </View>
                                     </Right>
                                 </CardItem>
                                 <CardItem>

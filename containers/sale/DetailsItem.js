@@ -1,5 +1,5 @@
 import {
-    Container, Header, Content, Title, Card, Toast, Text, Button, Left, Body, Right
+    Container, Header, Content, Title, Card,  Text, Button, Left, Body, Right
 } from "native-base";
 import React, { useState, useEffect } from 'react';
 import { AntDesign } from '@expo/vector-icons';
@@ -28,6 +28,9 @@ export default function DetailsItem({ route, navigation }) {
 
     }, [route, isFocused]);
 
+    function changeQtde(v) {
+        setQtde(v);
+    }
     return (
         <Container>
             <Header transparent androidStatusBarColor="#08012a" style={{ backgroundColor: '#08012a' }}>
@@ -49,9 +52,9 @@ export default function DetailsItem({ route, navigation }) {
                 </Right>
             </Header>
 
-            <Content >               
+            <Content >
                 <Card style={{ padding: 10 }}>
-                    <Text style={{ marginBottom: 20, marginTop: 10 }}>{item.name}</Text>                
+                    <Text style={{ marginBottom: 20, marginTop: 10 }}>{item.name}</Text>
                     <SliderBox
                         style={{ height: 250, width: '94%', flex: 1 }}
                         images={images}
@@ -80,7 +83,7 @@ export default function DetailsItem({ route, navigation }) {
                             <NumericInput
                                 value={Qtde}
                                 onChange={value => {
-                                    setQtde(value)
+                                    changeQtde(value);
                                     item.qtde = value
                                 }}
                                 onLimitReached={(isMax, msg) => console.log(isMax, msg)}
@@ -93,25 +96,28 @@ export default function DetailsItem({ route, navigation }) {
                                 iconStyle={{ color: 'white' }}
                                 rightButtonBackgroundColor='#a6d7f3'
                                 leftButtonBackgroundColor='#a6d7f3' />
+
                         </View>
                     </View>
 
-                    <Button full style={{ borderRadius: 5, marginTop: 20 }} onPress={() => {
-                        alert('Obrigado pela compra')
-                    }}>
+                    <Button
+                        testID="button-buy"
+                        full style={{ borderRadius: 5, marginTop: 20 }} onPress={() => {
+                            console.log('Obrigado pela compra');
+                        }}>
                         <Text style={{ color: '#fff' }}>COMPRAR</Text>
                     </Button>
 
 
-                    <Button full style={{ backgroundColor: '#a6d7f3', borderRadius: 5, marginTop: 10 }} onPress={() => {
-                        CART_ITEMS.push(item);
+                    <Button
+                        testID="add-to-cart"
+                        full style={{ backgroundColor: '#a6d7f3', borderRadius: 5, marginTop: 10 }} onPress={() => {
+                            CART_ITEMS.push(item);
 
-                        setBadge(CART_ITEMS.length);
+                            setBadge(CART_ITEMS.length);
 
-                        Toast.show({
-                            text: "Produto adicionado com Sucesso ao Carrinho",
-                        })
-                    }}>
+                            console.log('Produto adicionado ao Carrinho');
+                        }}>
                         <Text style={{ color: '#039cf5' }}>ADICIONAR AO CARRINHO</Text>
                     </Button>
 

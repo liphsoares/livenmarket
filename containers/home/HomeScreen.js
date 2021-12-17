@@ -6,7 +6,6 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Alert, FlatList, TouchableOpacity } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import CartIcon from "../sale/components/CartIcon";
-import CART_ITEMS from "../sale/Cart";
 
 export default function HomeScreen({ props, navigation }) {
     const isFocused = useIsFocused();
@@ -20,7 +19,7 @@ export default function HomeScreen({ props, navigation }) {
 
     useEffect(() => {
         isFocused ?
-            setBadge(global.CART_ITEMS.length) : null
+            setBadge(CART_ITEMS.length) : null
 
     }, [props, isFocused]);
 
