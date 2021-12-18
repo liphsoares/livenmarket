@@ -8,7 +8,7 @@ import DetailsItem from '../containers/sale/DetailsItem';
 import Cart from '../containers/sale/Cart';
 import { Root } from 'native-base';
 
-jest.useFakeTimers();
+
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
 
 describe('App', () => {

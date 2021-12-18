@@ -463,7 +463,7 @@ exports[`App Renderizar o App 1`] = `
                                           "paddingTop": undefined,
                                           "position": "absolute",
                                           "right": 0,
-                                          "top": -15.67275844441805,
+                                          "top": -16,
                                         }
                                       }
                                     >
