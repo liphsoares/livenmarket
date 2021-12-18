@@ -18,9 +18,7 @@ export default function HomeScreen({ props, navigation }) {
     }, [])
 
     useEffect(() => {
-        isFocused ?
-            setBadge(CART_ITEMS.length) : null
-
+        if (isFocused) setBadge(CART_ITEMS.length);
     }, [props, isFocused]);
 
     async function getData() {
@@ -89,17 +87,17 @@ export default function HomeScreen({ props, navigation }) {
             </Header>
 
             {IsLoading ?
-                <View 
-                testID="loading"
-                style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <View
+                    testID="loading"
+                    style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                     <Spinner size={64} color="#ccc" />
                     <Text note>Aguarde, Carregando...</Text>
                 </View>
                 :
                 <FlatList
-                    
+
                     data={searchResults}
-                    renderItem={({ item }) => {                        
+                    renderItem={({ item }) => {
                         return (
                             <Card transparent testID="flat-list">
                                 <CardItem bordered button={true} onPress={() => {

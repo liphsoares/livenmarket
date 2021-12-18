@@ -10,8 +10,7 @@ export default function Login({ props, navigation }) {
     const [IsLoading, setIsLoading] = useState(false);
 
     function navigateToHomeScreen() {
-        navigation.navigate('HomeScreen');
-        return "Navegando para HomeScreen";
+        navigation.navigate('HomeScreen');        
     }
     return (
         <Container style={{ backgroundColor: "#08012a", }}>

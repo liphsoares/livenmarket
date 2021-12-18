@@ -23,8 +23,12 @@ export default function Cart({ route, navigation }) {
 
         // Seto todas as quantidades que estão indefinidas para 1
         arr.forEach((element, index) => {
-            console.log(arr[index].qtde);
+
             if (arr[index].qtde === undefined) { arr[index].qtde = 1 }
+            else {
+                console.log('QTDE ADICIONADA: ' + arr[index].qtde);
+            }
+
         });
 
         // Passo os valores para o FlatList e também para a Variável Global e refaço o Somatório
@@ -53,7 +57,10 @@ export default function Cart({ route, navigation }) {
         arr.forEach((element) => {
             v = v + Number(element.price * element.qtde);
         });
+        
         setmTotal(v);
+
+        console.log('Total em R$:' + v);
     }
 
     // Função para remover os itens do Array
@@ -82,30 +89,33 @@ export default function Cart({ route, navigation }) {
                 </Body>
 
                 <Right >
-                    {global.CART_ITEMS.length > 0 ? <TouchableOpacity onPress={() => {
-                        Alert.alert(
-                            "Market",
-                            "Deseja limpar o seu carrinho de compras?",
-                            [
-                                {
-                                    text: "SIM",
-                                    onPress: () => {
-                                        global.CART_ITEMS = []
-                                        setsearchResults(global.CART_ITEMS);
-                                        setSelectedValue(!selectedValue);
-                                    },
-                                    style: "default",
-                                },
-                                {
-                                    text: "NÃO",
-                                    onPress: () => { },
-                                    style: "default",
-                                },
-                            ]
-                        );
-                    }}>
-                        <Ionicons name="ios-trash-outline" size={24} color="#fff" />
-                    </TouchableOpacity> : null}
+                    {global.CART_ITEMS.length > 0 ?
+                        <TouchableOpacity
+                            testID="remove-all"
+                            onPress={() => {
+                                Alert.alert(
+                                    "Market",
+                                    "Deseja limpar o seu carrinho de compras?",
+                                    [
+                                        {
+                                            text: "SIM",
+                                            onPress: () => {
+                                                global.CART_ITEMS = []
+                                                setsearchResults(global.CART_ITEMS);
+                                                setSelectedValue(!selectedValue);
+                                            },
+                                            style: "default",
+                                        },
+                                        {
+                                            text: "NÃO",
+                                            onPress: () => { },
+                                            style: "default",
+                                        },
+                                    ]
+                                );
+                            }}>
+                            <Ionicons name="ios-trash-outline" size={24} color="#fff" />
+                        </TouchableOpacity> : null}
                 </Right >
             </Header>
             {searchResults.length > 0 ? <Content style={{ padding: 10 }}>
@@ -130,7 +140,7 @@ export default function Cart({ route, navigation }) {
 
                                     </Left>
 
-                                    <Right >
+                                    <Right>
                                         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
                                             <NumericInput
                                                 value={item.qtde}
@@ -152,14 +162,18 @@ export default function Cart({ route, navigation }) {
                                         </View>
                                     </Right>
                                 </CardItem>
-                                <CardItem>
-                                    <Left>
-                                        <Button transparent onPress={() => {
-                                            removeItem(item);
-                                            Toast.show({
-                                                text: "Produto Removido com Sucesso!",
-                                            })
-                                        }}>
+                                <CardItem >
+                                    <Left >
+                                        <Button
+                                            testID="remove"
+                                            transparent onPress={() => {
+
+                                                removeItem(item);
+                                                console.log('Produto Removido com Sucesso!');
+                                                // Toast.show({
+                                                //     text: "Produto Removido com Sucesso!",
+                                                // })
+                                            }}>
                                             <Text>Remove</Text>
                                         </Button>
                                     </Left>

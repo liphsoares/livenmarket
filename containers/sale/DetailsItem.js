@@ -1,5 +1,5 @@
 import {
-    Container, Header, Content, Title, Card,  Text, Button, Left, Body, Right
+    Container, Header, Content, Title, Card, Text, Button, Left, Body, Right
 } from "native-base";
 import React, { useState, useEffect } from 'react';
 import { AntDesign } from '@expo/vector-icons';
@@ -30,6 +30,12 @@ export default function DetailsItem({ route, navigation }) {
 
     function changeQtde(v) {
         setQtde(v);
+    }
+
+    function addCart(item) {
+        CART_ITEMS.push(item);
+
+        setBadge(CART_ITEMS.length);
     }
     return (
         <Container>
@@ -112,9 +118,7 @@ export default function DetailsItem({ route, navigation }) {
                     <Button
                         testID="add-to-cart"
                         full style={{ backgroundColor: '#a6d7f3', borderRadius: 5, marginTop: 10 }} onPress={() => {
-                            CART_ITEMS.push(item);
-
-                            setBadge(CART_ITEMS.length);
+                            addCart(item);
 
                             console.log('Produto adicionado ao Carrinho');
                         }}>

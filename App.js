@@ -38,13 +38,12 @@ export default function App() {
     }
   }
 
-  if (!isLoadingComplete) {
-    console.log('não loguei');
+  if (!isLoadingComplete) {  
     return (
       <AppLoading />
     )
   }
-  console.log('loguei');
+  
   return (
     <Root>
       <NavigationContainer>

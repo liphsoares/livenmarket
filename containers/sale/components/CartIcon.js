@@ -6,7 +6,9 @@ import { Ionicons } from '@expo/vector-icons';
 export default function CartIcon(props) {
     return (
         <View >
-            <Text style={{
+            <Text 
+            testID='qtde-cart'
+            style={{
                 textAlign: 'center',
                 color: '#08012a',
                 position: 'absolute',

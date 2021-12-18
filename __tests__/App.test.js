@@ -1,26 +1,27 @@
 import React from 'react';
-import Login from './containers/login/Login'
+import Login from '../containers/login/Login'
 import { cleanup, render, fireEvent, waitFor } from '@testing-library/react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import HomeScreen from './containers/home/HomeScreen';
-import App from './App';
-import DetailsItem from './containers/sale/DetailsItem';
-import Cart from './containers/sale/Cart';
+import HomeScreen from '../containers/home/HomeScreen';
+import App from '../App';
+import DetailsItem from '../containers/sale/DetailsItem';
+import Cart from '../containers/sale/Cart';
 import { Root } from 'native-base';
 
-
-
-afterEach(cleanup);
+jest.useFakeTimers();
+jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
 
 describe('App', () => {
-  it('Renderizar o App', () => {
-    const component = (
-      <NavigationContainer>
-        <App />
-      </NavigationContainer>
-    );
-    const home = render(component);
-    expect(home.toJSON()).toMatchSnapshot();
+  let app;
+
+  beforeEach(async () => {
+    const component = (<App />);
+    app = await waitFor(async () => render(component));
+
+  });
+
+  it('Renderizar o App', async () => {
+    expect(app.toJSON()).toMatchSnapshot();
   });
 
 });
@@ -32,7 +33,7 @@ describe('Login', () => {
         <Login />
       </NavigationContainer>
     );
-    const home = render(component);
+    const home = await waitFor(async () => render(component));
     const header = await home.getByText('Senha');
     expect(home.toJSON()).toMatchSnapshot();
     expect(header).toBeTruthy();
@@ -65,25 +66,25 @@ describe('Login', () => {
 
 describe('HomeScreen', () => {
 
-  it('Renderizar o HomeSreen', () => {
+  it('Renderizar o HomeSreen', async () => {
     const component = (
       <NavigationContainer>
         <HomeScreen />
       </NavigationContainer>
     );
-    const home = render(component);
+    const home = await waitFor(async () => render(component));
     const header = home.getByText('Web Market');
     expect(home.toJSON()).toMatchSnapshot();
     expect(header).toBeTruthy();
   });
 
-  it('Botão Cart Existe', () => {
+  it('Botão Cart Existe', async () => {
     const component = (
       <NavigationContainer>
         <HomeScreen />
       </NavigationContainer>
     );
-    const home = render(component);
+    const home = await waitFor(async () => render(component));
     const testIdName = 'button-cart';
     const foundButton = home.getByTestId(testIdName);
     expect(foundButton).toBeTruthy();
@@ -97,7 +98,7 @@ describe('HomeScreen', () => {
       </NavigationContainer>
     );
 
-    const { getByTestId } = render(component);
+    const { getByTestId } = await waitFor(async () => render(component));
     const foundSpinner = getByTestId('loading');
 
     expect(foundSpinner).toBeTruthy();
@@ -121,47 +122,64 @@ describe('DetailsItem', () => {
     </Root>
   );
 
-
   it('Renderizar o DetailsItem', async () => {
+    let Details
+    await waitFor(async () =>
+      Details = render(component)
+    );
 
-    const Details = render(component);
-    const header = Details.getByText('Detalhes');
     expect(Details.toJSON()).toMatchSnapshot();
+
+    const header = Details.getByText('Detalhes');
     expect(header).toBeTruthy();
   });
 
 
-  it('Clique do Botao Add-to Card', async () => {
-    const logSpy = jest.spyOn(console, "Carrinho");    
-    const { getByTestId } = render(component);
+  it('Clique do Botao Add-to Cart', async () => {
+    const { getByTestId, queryByTestId } = await waitFor(async () => render(component));
     const foundButton = getByTestId('add-to-cart');
+    const foundText = queryByTestId('qtde-cart');
     expect(foundButton).toBeTruthy();
-    await fireEvent.press(foundButton);
-    expect(logSpy).toHaveBeenCalledTimes(1);
+
+    await waitFor(async () => {
+      fireEvent.press(foundButton);
+    });
+
+    await waitFor(() =>
+      expect(foundText).toBeTruthy()
+    );
+
   });
-
-
-  it('Clique do Botao Comprar', async () => {
-    const logSpy = jest.spyOn(console, "compra");    
-    const { getByTestId } = render(component);
-    const foundButton = getByTestId('button-buy');
-
-    expect(foundButton).toBeTruthy();
-    await fireEvent.press(foundButton);
-    expect(logSpy).toHaveBeenCalledTimes(1);
-  });
-
-
-
-
 
 });
 
 describe('Cart', () => {
+  const component = (
+    <NavigationContainer>
+      <Cart />
+    </NavigationContainer>
+  );
+
   test('Renderizar o Cart', async () => {
 
-    const cart = render(<Cart />).toJSON();;
-    expect(cart).toMatchSnapshot();
+    const cart = await waitFor(async () => render(component));
+    expect(cart.toJSON()).toMatchSnapshot();
+  });
+
+  it('Clique do Botao Remove item', async () => {
+    const { getByTestId, queryByText } = render(component);
+    const foundButton = getByTestId('remove');
+    const foundText = queryByText('Carrinho de Compras');
+    expect(foundButton).toBeTruthy();
+
+    await waitFor(async () => {
+      fireEvent.press(foundButton);
+    });
+
+    await waitFor(() =>
+      expect(foundText).toBeTruthy()
+    );
+
   });
 
 });
